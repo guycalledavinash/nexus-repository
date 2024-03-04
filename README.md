@@ -14,7 +14,9 @@ mv nexus-3.41.1-01 /opt/nexus
 mv sonatype-work /opt/
 chown -R nexus:nexus /opt/nexus /opt/sonatype-work
 sudo nano /opt/nexus/bin/nexus.rc
+```
 run_as_user="nexus"
+```
 sudo nano /opt/nexus/bin/nexus.vmoptions
 ```
 Change the existing RAM congiguration to this:
