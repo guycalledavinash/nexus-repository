@@ -1,4 +1,5 @@
 ## Server setup 
+I had hard time finding the right commands initially but these worked for me:
 ```
 sudo apt install openjdk-8-jdk
 java -version
@@ -7,7 +8,7 @@ sudo passwd nexus
 ulimit -n 65536
 sudo nano /etc/security/limits.d/nexus.conf
 nexus - nofile 65536
-wget https://download.sonatype.com/nexus/3...
+wget https://download.sonatype.com/nexus/3/nexus-3.41.1-01-unix.tar.gz
 tar xzf nexus-3.41.1-01-unix.tar.gz
 mv nexus-3.41.1-01 /opt/nexus
 mv sonatype-work /opt/
