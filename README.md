@@ -4,9 +4,9 @@ In production, remote repositories are used for sharing libraries, artifacts, et
 
 One such tool is Nexus
 
-If the snapshot and release repository details details are configured in `pom.xml` file, the commands ran in local are reflected in nexus repository, not local
+If the snapshot and release repository details details are configured in `pom.xml` file, the commands ran in local are reflected in nexus repository, not local repo itself
 
-Btw, this should be the local directory for maven: `C:\user\.m2\repo\groupID`
+This should be the local directory for maven: `C:\user\.m2\repo\groupID`
 
 ## Server setup 
 I had hard time finding the right commands initially but these worked for me:
@@ -67,7 +67,42 @@ First job is to create two repositories in nexus i.e, snapshot and release
 
 ![set](https://github.com/guycalledavinash/nexus-repository/assets/90386560/e891e95f-e9a9-4100-9049-80d01b8cd5ed)
 
-2. Give a name, select type and allow redeploy
+2. Give a name, select type and allow redeploy - create both repos
 
-![name](https://github.com/guycalledavinash/nexus-repository/assets/90386560/e891e95f-e9a9-4100-9049-80d01b8cd5ed)
+![name](https://github.com/guycalledavinash/nexus-repository/assets/90386560/6c60c1d4-761f-42c1-b218-a0b403896842)
 
+3. After creation, copy their links, paste them in this template in URL section.
+```
+<distributionManagement>  
+		<repository>
+			<id>nexus</id>
+			<name>Avinash Release Nexus Repo</name>
+			<url>http://18.191.242.105:8081/repository/avinash_release/</url>
+		</repository>
+	
+		<snapshotRepository>
+			<id>nexus</id>
+			<name>Avinash Snapshot Nexus Repo</name>
+			<url>http://18.191.242.105:8081/repository/avinash_snapshot/</url>
+		</snapshotRepository>	
+</distributionManagement>
+```
+4. Paste all this in 'pom.xml' file in the local - [preview](https://github.com/guycalledavinash/nexus-repository/blob/main/pom.xml)
+
+(make sure to update the IP addresses in `pom.xml` as they keep changing everytime we login)
+
+6. Also update 'settings.xml' from `C:maven > conf > settings.xml` like [this](https://github.com/guycalledavinash/nexus-repository/blob/main/settings.xml)
+
+7. Once everything is setup, run this
+```
+mvn clean deploy
+```
+![deploy](https://github.com/guycalledavinash/nexus-repository/assets/90386560/3d267239-4586-4a7d-a611-384d59afae06)
+
+This deploys all the artifact in remote repository
+
+#Remote Repository
+
+Remote repos help companies maintain shared libraries with them.
+
+It contributes to efficiency as companies can use the same artifact for multiple projects like a password encryption plugin
