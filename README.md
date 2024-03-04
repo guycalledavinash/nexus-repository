@@ -1,3 +1,13 @@
+Predecessor: [Maven](https://github.com/guycalledavinash/maven)
+
+In production, remote repositories are used for sharing libraries, artifacts, etc.
+
+One such tool is Nexus
+
+If the snapshot and release repository details details are configured in `pom.xml` file, the commands ran in local are reflected in nexus repository, not local
+
+Btw, this should be the local directory for maven: `C:\user\.m2\repo\groupID`
+
 ## Server setup 
 I had hard time finding the right commands initially but these worked for me:
 ```
@@ -46,4 +56,18 @@ sudo ln -s /etc/nginx/sites-available/nexus /etc/nginx/sites-enabled/
 sudo nginx -t
 sudo systemctl restart nginx
 ```
-Expose port 8081 in security settings and you're good
+Expose port *8081* in security settings and you're good
+
+![finish](https://github.com/guycalledavinash/nexus-repository/assets/90386560/adb0ba47-73f8-4e80-93f2-34fb512ad656)
+
+## Integrate local Maven with Nexus
+First job is to create two repositories in nexus i.e, snapshot and release
+
+1. Go to Settings > repositories > create repo > maven2(hosted)
+
+![set](https://github.com/guycalledavinash/nexus-repository/assets/90386560/e891e95f-e9a9-4100-9049-80d01b8cd5ed)
+
+2. Give a name, select type and allow redeploy
+
+![name](https://github.com/guycalledavinash/nexus-repository/assets/90386560/e891e95f-e9a9-4100-9049-80d01b8cd5ed)
+
