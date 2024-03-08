@@ -22,8 +22,8 @@ paste this in the editor: `nexus - nofile 65536`
 ```
 wget https://download.sonatype.com/nexus/3/nexus-3.41.1-01-unix.tar.gz
 tar xzf nexus-3.41.1-01-unix.tar.gz
-mv nexus-3.41.1-01 /opt/nexus
-mv sonatype-work /opt/
+sudo mv nexus-3.41.1-01 /opt/nexus
+sudo mv sonatype-work /opt/
 chown -R nexus:nexus /opt/nexus /opt/sonatype-work
 sudo nano /opt/nexus/bin/nexus.rc
 ```
