@@ -63,48 +63,59 @@ Expose port *8081* in security settings and you're good
 ![finish](https://github.com/guycalledavinash/nexus-repository/assets/90386560/adb0ba47-73f8-4e80-93f2-34fb512ad656)
 
 ## Integrate local Maven with Nexus
-First job is to create two repositories in nexus i.e, snapshot and release
 
-1. Go to Settings > repositories > create repo > maven2(hosted)
+Create separate hosted Maven repositories in Nexus for releases and snapshots. The POM keeps the existing repository paths, `avinash_release` and `avinash_snapshot`, and selects between them based on the project version: versions ending in `-SNAPSHOT` publish to the snapshot repository; other versions publish to the release repository.
 
-![set](https://github.com/guycalledavinash/nexus-repository/assets/90386560/e891e95f-e9a9-4100-9049-80d01b8cd5ed)
+### Configure the endpoint
 
-2. Give a name, select type and allow redeploy - create both repos
+Set `NEXUS_BASE_URL` to the base URL of your own Nexus instance, without a trailing slash. The POM appends `/repository/avinash_release/` or `/repository/avinash_snapshot/`.
 
-![name](https://github.com/guycalledavinash/nexus-repository/assets/90386560/6c60c1d4-761f-42c1-b218-a0b403896842)
+PowerShell:
 
-3. After creation, copy their links, paste them in this template in URL section.
+```powershell
+$env:NEXUS_BASE_URL = "https://your-nexus-host"
 ```
-<distributionManagement>  
-		<repository>
-			<id>nexus</id>
-			<name>Avinash Release Nexus Repo</name>
-			<url>http://18.191.242.105:8081/repository/avinash_release/</url>
-		</repository>
-	
-		<snapshotRepository>
-			<id>nexus</id>
-			<name>Avinash Snapshot Nexus Repo</name>
-			<url>http://18.191.242.105:8081/repository/avinash_snapshot/</url>
-		</snapshotRepository>	
-</distributionManagement>
+
+Bash:
+
+```sh
+export NEXUS_BASE_URL="https://your-nexus-host"
 ```
-4. Paste all this in 'pom.xml' file in the local - [preview](https://github.com/guycalledavinash/nexus-repository/blob/main/pom.xml)
 
-(make sure to update the IP addresses in `pom.xml` as they keep changing everytime we login)
+Use HTTPS when the Nexus endpoint supports it. Do not send credentials over unencrypted HTTP.
 
-6. Also update 'settings.xml' from `C:maven > conf > settings.xml` like [this](https://github.com/guycalledavinash/nexus-repository/blob/main/settings.xml)
+### Configure credentials locally
 
-7. Once everything is setup, run this
+Copy `settings.xml.example` to your Maven user settings file and replace the placeholders locally with your Nexus username and password. Do not commit the populated file or share its contents.
+
+- Linux/macOS: `~/.m2/settings.xml`
+- Windows: `%USERPROFILE%\.m2\settings.xml`
+
+For example, on Windows PowerShell:
+
+```powershell
+New-Item -ItemType Directory -Force "$env:USERPROFILE\.m2"
+Copy-Item .\settings.xml.example "$env:USERPROFILE\.m2\settings.xml"
 ```
-mvn clean deploy
+
+The `<server><id>` value in Maven settings must match the repository `<id>` in `pom.xml`. Both release and snapshot repositories use `nexus`, so Maven uses the matching credentials for either destination. The root-level `settings.xml` is ignored by Git as an additional safeguard.
+
+### Validate and publish
+
+Run local checks first. These do not contact Nexus or publish artifacts:
+
+```sh
+mvn clean verify
 ```
-![deploy](https://github.com/guycalledavinash/nexus-repository/assets/90386560/3d267239-4586-4a7d-a611-384d59afae06)
 
-This deploys all the artifact in remote repository
+To publish, configure `NEXUS_BASE_URL` and the matching credentials in your Maven user settings, then run:
 
-#Remote Repository
+```sh
+mvn deploy
+```
 
-Remote repos help companies maintain shared libraries with them.
+Publishing contacts the configured remote Nexus server. Run it only after confirming the endpoint and credentials are correct. Never put real credentials in Git; HTTPS protects them in transit when supported by your Nexus installation.
 
-It contributes to efficiency as companies can use the same artifact for multiple projects like a password encryption plugin
+# Remote Repository
+
+Remote repositories help organizations share libraries and artifacts across projects.
