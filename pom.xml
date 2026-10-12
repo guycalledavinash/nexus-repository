@@ -7,20 +7,19 @@
   <version>1.0-Release</version>
   <name>01-Maven-App</name>
   <url>http://maven.apache.org</url>
-  
-    <distributionManagement>  
-		<repository>
-			<id>nexus</id>
-			<name>Avinash Release Nexus Repo</name>
-			<url>http://18.191.242.105:8081/repository/avinash_release/</url>
-		</repository>
-	
-		<snapshotRepository>
-			<id>nexus</id>
-			<name>Avinash Snapshot Nexus Repo</name>
-			<url>http://18.191.242.105:8081/repository/avinash_snapshot/</url>
-		</snapshotRepository>	
-    </distributionManagement>
+
+  <distributionManagement>
+    <repository>
+      <id>nexus</id>
+      <name>Avinash Release Nexus Repo</name>
+      <url>${env.NEXUS_BASE_URL}/repository/avinash_release/</url>
+    </repository>
+    <snapshotRepository>
+      <id>nexus</id>
+      <name>Avinash Snapshot Nexus Repo</name>
+      <url>${env.NEXUS_BASE_URL}/repository/avinash_snapshot/</url>
+    </snapshotRepository>
+  </distributionManagement>
 
   <dependencies>
     <dependency>
@@ -30,4 +29,4 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
-</project> 
+</project>
